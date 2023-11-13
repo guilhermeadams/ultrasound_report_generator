@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ultrasound Report Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .centered {
+            text-align: center;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin: 20px 0;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h2>Ultrasound Report</h2>
+    <table id="ultrasound-report">
+        <tr>
+            <th>Code</th>
+            <th>Estrutura</th>
+            <th>Normal</th>
+            <th>Anormal</th>
+            <th>Não visibilizada</th>
+            <th>Comentários</th>
+            <th>Impressão Diagnóstica</th>
+        </tr>
+        <!-- Rows for each organ -> 'figado', 'vesicula', 'baco', 'rim_direito', 'rim_esquerdo', 'bexiga', 'adrenal_direita', 'adrenal_esquerda', 'estomago', 'intestino_delgado', 'colon', 'pancreas', 'peritonio', 'linfonodos', 'utero', 'ovarios', 'outros' -->
+        <tr>
+            <td>Fígado</td>
+            <td><select id="figado-code" onchange="updateReport('figado')"><option value="">Select Code</option></select></td>
+            <td class="centered"><input type="checkbox" id="figado-normal"></td>
+            <td class="centered"><input type="checkbox" id="figado-anormal"></td>
+            <td class="centered"><input type="checkbox" id="figado-nao-visibilizada"></td>
+            <td><input type="text" id="figado-comentarios"></td>
+            <td><input type="text" id="figado-impressao-diagnostica"></td>
+        </tr>
+        <tr>
+            <td>Vesícula</td>
+            <td><select id="vesicula-code" onchange="updateReport('vesicula')"><option value="">Select Code</option></select></td>
+            <td class="centered"><input type="checkbox" id="vesicula-normal"></td>
+            <td class="centered"><input type="checkbox" id="vesicula-anormal"></td>
+            <td class="centered"><input type="checkbox" id="vesicula-nao-visibilizada"></td>
+            <td><input type="text" id="vesicula-comentarios"></td>
+            <td><input type="text" id="vesicula-impressao-diagnostica"></td>
+        </tr>
+        <tr>
+            <td>Baço</td>
+            <td><select id="baco-code" onchange="updateReport('baco')"><option value="">Select Code</option></select></td>
+            <td class="centered"><input type="checkbox" id="baco-normal"></td>
+            <td class="centered"><input type="checkbox" id="baco-anormal"></td>
+            <td class="centered"><input type="checkbox" id="baco-nao-visibilizada"></td>
+            <td><input type="text" id="baco-comentarios"></td>
+            <td><input type="text" id="baco-impressao-diagnostica"></td>
+        </tr>
+        <tr>
+            <td>Rim Esquerdo</td>
+            <td><select id="rim_esquerdo-code" onchange="updateReport('rim_esquerdo')"><option value="">Select Code</option></select></td>
+            <td class="centered"><input type="checkbox" id="rim_esquerdo-normal"></td>
+            <td class="centered"><input type="checkbox" id="rim_esquerdo-anormal"></td>
+            <td class="centered"><input type="checkbox" id="rim_esquerdo-nao-visibilizada"></td>
+            <td><input type="text" id="rim_esquerdo-comentarios"></td>
+            <td><input type="text" id="rim_esquerdo-impressao-diagnostica"></td>
+        </tr>
+        <tr>
+            <td>Rim Direito</td>
+            <td><select id="rim_direito-code" onchange="updateReport('rim_direito')"><option value="">Select Code</option></select></td>
+            <td class="centered"><input type="checkbox" id="rim_direito-normal"></td>
+            <td class="centered"><input type="checkbox" id="rim_direito-anormal"></td>
+            <td class="centered"><input type="checkbox" id="rim_direito-nao-visibilizada"></td>
+            <td><input type="text" id="rim_direito-comentarios"></td>
+            <td><input type="text" id="rim_direito-impressao-diagnostica"></td>
+        </tr>
+        <tr>
+            <td>Bexiga</td>
+            <td><select id="bexiga-code" onchange="updateReport('bexiga')"><option value="">Select Code</option></select></td>
+            <td class="centered"><input type="checkbox" id="bexiga-normal"></td>
+            <td class="centered"><input type="checkbox" id="bexiga-anormal"></td>
+            <td class="centered"><input type="checkbox" id="bexiga-nao-visibilizada"></td>
+            <td><input type="text" id="bexiga-comentarios"></td>
+            <td><input type="text" id="bexiga-impressao-diagnostica"></td>
+        </tr>
+        <tr>
+            <td>Adrenal Esquerda</td>
+            <td><select id="adrenal_esquerda-code" onchange="updateReport('adrenal_esquerda')"><option value="">Select Code</option></select></td>
+            <td class="centered"><input type="checkbox" id="adrenal_esquerda-normal"></td>
+            <td class="centered"><input type="checkbox" id="adrenal_esquerda-anormal"></td>
+            <td class="centered"><input type="checkbox" id="adrenal_esquerda-nao-visibilizada"></td>
+            <td><input type="text" id="adrenal_esquerda-comentarios"></td>
+            <td><input type="text" id="adrenal_esquerda-impressao-diagnostica"></td>
+        </tr>
+        <tr>
+            <td>Adrenal Direita</td>
+            <td><select id="adrenal_direita-code" onchange="updateReport('adrenal_direita')"><option value="">Select Code</option></select></td>
+            <td class="centered"><input type="checkbox" id="adrenal_direita-normal"></td>
+            <td class="centered"><input type="checkbox" id="adrenal_direita-anormal"></td>
+            <td class="centered"><input type="checkbox" id="adrenal_direita-nao-visibilizada"></td>
+            <td><input type="text" id="adrenal_direita-comentarios"></td>
+            <td><input type="text" id="adrenal_direita-impressao-diagnostica"></td>
+        </tr>
+        <tr>
+            <td>Estômago</td>
+            <td><select id="estomago-code" onchange="updateReport('estomago')"><option value="">Select Code</option></select></td>
+            <td class="centered"><input type="checkbox" id="estomago-normal"></td>
+            <td class="centered"><input type="checkbox" id="estomago-anormal"></td>
+            <td class="centered"><input type="checkbox" id="estomago-nao-visibilizada"></td>
+            <td><input type="text" id="estomago-comentarios"></td>
+            <td><input type="text" id="estomago-impressao-diagnostica"></td>
+        </tr>
+        <tr>
+            <td>Intestino Delgado</td>
+            <td><select id="intestino_delgado-code" onchange="updateReport('intestino_delgado')"><option value="">Select Code</option></select></td>
+            <td class="centered"><input type="checkbox" id="intestino_delgado-normal"></td>
+            <td class="centered"><input type="checkbox" id="intestino_delgado-anormal"></td>
+            <td class="centered"><input type="checkbox" id="intestino_delgado-nao-visibilizada"></td>
+            <td><input type="text" id="intestino_delgado-comentarios"></td>
+            <td><input type="text" id="intestino_delgado-impressao-diagnostica"></td>
+        </tr>
+        <tr>
+            <td>Colon</td>
+            <td><select id="colon-code" onchange="updateReport('colon')"><option value="">Select Code</option></select></td>
+            <td class="centered"><input type="checkbox" id="colon-normal"></td>
+            <td class="centered"><input type="checkbox" id="colon-anormal"></td>
+            <td class="centered"><input type="checkbox" id="colon-nao-visibilizada"></td>
+            <td><input type="text" id="colon-comentarios"></td>
+            <td><input type="text" id="colon-impressao-diagnostica"></td>
+        </tr>
+        <tr>
+            <td>Pâncreas</td>
+            <td><select id="pancreas-code" onchange="updateReport('pancreas')"><option value="">Select Code</option></select></td>
+            <td class="centered"><input type="checkbox" id="pancreas-normal"></td>
+            <td class="centered"><input type="checkbox" id="pancreas-anormal"></td>
+            <td class="centered"><input type="checkbox" id="pancreas-nao-visibilizada"></td>
+            <td><input type="text" id="pancreas-comentarios"></td>
+            <td><input type="text" id="pancreas-impressao-diagnostica"></td>
+        </tr>
+
+        <tr>
+            <td>Peritônio</td>
+            <td><select id="peritonio-code" onchange="updateReport('peritonio')"><option value="">Select Code</option></select></td>
+            <td class="centered"><input type="checkbox" id="peritonio-normal"></td>
+            <td class="centered"><input type="checkbox" id="peritonio-anormal"></td>
+            <td class="centered"><input type="checkbox" id="peritonio-nao-visibilizada"></td>
+            <td><input type="text" id="peritonio-comentarios"></td>
+            <td><input type="text" id="peritonio-impressao-diagnostica"></td>
+        </tr>
+        <tr>
+            <td>Linfonodos</td>
+            <td><select id="linfonodos-code" onchange="updateReport('linfonodos')"><option value="">Select Code</option></select></td>
+            <td class="centered"><input type="checkbox" id="linfonodos-normal"></td>
+            <td class="centered"><input type="checkbox" id="linfonodos-anormal"></td>
+            <td class="centered"><input type="checkbox" id="linfonodos-nao-visibilizada"></td>
+            <td><input type="text" id="linfonodos-comentarios"></td>
+            <td><input type="text" id="linfonodos-impressao-diagnostica"></td>
+        </tr>
+        <tr>
+            <td>Útero</td>
+            <td><select id="utero-code" onchange="updateReport('utero')"><option value="">Select Code</option></select></td>
+            <td class="centered"><input type="checkbox" id="utero-normal"></td>
+            <td class="centered"><input type="checkbox" id="utero-anormal"></td>
+            <td class="centered"><input type="checkbox" id="utero-nao-visibilizada"></td>
+            <td><input type="text" id="utero-comentarios"></td>
+            <td><input type="text" id="utero-impressao-diagnostica"></td>
+        </tr>
+        <tr>
+            <td>Ovários</td>
+            <td><select id="ovarios-code" onchange="updateReport('ovarios')"><option value="">Select Code</option></select></td>
+            <td class="centered"><input type="checkbox" id="ovarios-normal"></td>
+            <td class="centered"><input type="checkbox" id="ovarios-anormal"></td>
+            <td class="centered"><input type="checkbox" id="ovarios-nao-visibilizada"></td>
+            <td><input type="text" id="ovarios-comentarios"></td>
+            <td><input type="text" id="ovarios-impressao-diagnostica"></td>
+        </tr>
+        <tr>
+            <td>Outros</td>
+            <td><select id="outros-code" onchange="updateReport('outros')"><option value="">Select Code</option></select></td>
+            <td class="centered"><input type="checkbox" id="outros-normal"></td>
+            <td class="centered"><input type="checkbox" id="outros-anormal"></td>
+            <td class="centered"><input type="checkbox" id="outros-nao-visibilizada"></td>
+            <td><input type="text" id="outros-comentarios"></td>
+            <td><input type="text" id="outros-impressao-diagnostica"></td>
+        </tr>
+
+
+    </table>
+    <button id="generate-pdf" onclick="generatePDF()">Generate PDF</button>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <script src="/static/script.js"></script>
+</body>
+</html>
